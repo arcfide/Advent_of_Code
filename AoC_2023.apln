@@ -1,5 +1,16 @@
 :Namespace AoC_2023
 
+⍝ The code here represents the more or less exact code that I used to 
+⍝ solve each Advent of Code problem for 2023. 
+⍝
+⍝ The goal here is not to give you the most elegant solutions, but to
+⍝ instead give you an idea of the sort of rough draft code that would
+⍝ be written when I am under time pressures and trying to get points on
+⍝ the board. This should help me get some very interesting data on the 
+⍝ use of APL for myself under time pressures and under conditions where
+⍝ I am not going to be refining the code over time or doing any 
+⍝ refactoring.
+
 day1_p1←{+⌿(⍎2⍴1∘↑,¯1∘↑)¨⎕D(∊⍨⊆⊢)⍵∩⎕D,⎕UCS 13}
 day1_p2←{day1_p1 txt⊣'123456789'{(⍵⌿txt)←⍺}¨'one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine'⍷¨⊂txt←⍵}
 

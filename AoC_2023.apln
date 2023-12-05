@@ -51,5 +51,32 @@ day4_p2←{
 	1⊃{c t←⍵ ⋄ nc←∊c{1+⍺+⍳⍵}¨matches[c] ⋄ nc(t+≢nc)}⍣{0≡≢⊃⍺}(⍳≢matches)(≢matches)
 }
 
+day5_p1←{
+	maps←⍎⍤1¨2↓¨(⍵∧.=' ')⊂[0]⍵
+	seeds←⍎7↓0⌷⍵
+	lookup←{⍵{m←¯1=⍵ ⋄ (⍺×m)+⍵×~m}⌈/⍵{d l r←⍵ ⋄ h←l+r ⋄ (l≤⍺)∧⍺≤h:d+⍺-l ⋄ ¯1}⍤1⍤0 2⊢⍺}
+	⌊⌿⊃lookup⌿(⌽maps),⊂seeds
+}
+
+day5_p2←{
+	maps←{d s r←⍎⍵ ⋄ 2 2⍴s(s+r)d(d+r)}⍤1¨2↓¨(⍵∧.=' ')⊂[0]⍵
+	seeds←(⊣/,[.5]+/){⍵}⌺(⍪2 2)⍎7↓0⌷⍵
+	norm←{
+		src←{⍵[⍋⍵]},⍺[;0;]
+		{
+			beg←⍵[;0] ⋄ end←⍵[;1]
+			i←⍸⊃≠/bi ei←src∘⍸¨beg(end-1)
+			end,←end[i] ⋄ beg,←end[i]←src[ei[i]]
+			beg,⍪end
+		}⍣≡⊢⍵
+	}
+	lookup←{
+		src dst←⊂[0 2]⍺ ⋄ i←⍋src ⋄ src←,src[i;] ⋄ dst←,dst[i;]
+		beg end←↓⍉⍺ norm ⍵ ⋄ len←end-beg
+		i←⍸0=2|bi←src⍸beg ⋄ beg[i]←dst[bi[i]]+beg[i]-src[bi[i]] ⋄ end[i]←beg[i]+len[i]
+		beg,⍪end
+	}
+	⌊⌿0⌷⍉⊃lookup⌿(⌽maps),⊂seeds
+}
 
 :EndNamespace

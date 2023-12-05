@@ -33,9 +33,9 @@ day3_p1←{
 }
 
 day3_p2←{
+	msk←⍵∊⎕D
 	gears←⌈/⌈/{⍵}⌺3 3⊢('*'=⍵)×(⍴⍵)⍴⍳≢,⍵
 	gear_num←⌈/¨msk⊆⍥,gears
-	msk←⍵∊⎕D
 	nums←⍎¨msk⊆⍥,⍵
 	+⌿gear_num{0=⍺:0 ⋄ 2≠≢⍵:0 ⋄ ×⌿⍵}⌸nums
 }

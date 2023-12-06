@@ -79,4 +79,14 @@ day5_p2←{
 	⌊⌿0⌷⍉⊃lookup⌿(⌽maps),⊂seeds
 }
 
+day6_p1←{                                 
+	time dist←↓{⍎(1+⍵⍳':')↓⍵}⍤1⊢⍵     
+	×⌿+⌿¨dist{⍺<(⊢×⍵-⊢)⍳⍵}¨time       
+}                                         
+
+day6_p2←{                                 
+	time dist←{⍎' '~⍨(1+⍵⍳':')↓⍵}⍤1⊢⍵ 
+	+⌿dist<(⊢×time-⊢)⍳time            
+}                                         
+
 :EndNamespace

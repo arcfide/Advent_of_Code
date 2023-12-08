@@ -126,5 +126,23 @@ day7_p2←{
 	rank+.×bids                              
 }                                                
 
+day8_p1←{                                                          
+	steps←(0⌷⍵)~' '                                            
+	map←{(⍵∊⎕A)⊆⍵}⍤1⊢2↓⍵                                       
+	0{                                                         
+		⍵≡'ZZZ':⍺                                          
+		(1+⍺)∇⊃map[map[;0]⍳⊂⍵;1 2]['LR'⍳steps[(≢steps)|⍺]] 
+	}'AAA'                                                     
+}                                                                  
+
+day8_p2←{                                                          
+	steps←(0⌷⍵)~' '                                            
+	map←{(⍵∊⎕A,⎕D)⊆⍵}⍤1⊢2↓⍵                                    
+	nxt←{⊃map[map[;0]⍳⊂⍵;1 2]['LR'⍳steps[(≢steps)|⍺]]}         
+	cnt←{⍺←0 ⋄ 'Z'=⊃⌽⍵:⍵ ⍺ ⋄ (1+⍺)∇ ⍺ nxt ⍵}                   
+	⎕←↑z c1←↓⍉↑cnt¨map[;0]⌿⍨'A'=⊃∘⌽¨map[;0]                    
+	∧⌿c1-⍨1⌷⍉↑(1+c1)cnt¨c1 nxt¨z                               
+}                                                                  
+
 
 :EndNamespace

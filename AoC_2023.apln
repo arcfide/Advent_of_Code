@@ -154,5 +154,34 @@ day9_p2←{
 	+⌿{⍺←⊃⍵ ⋄ ∧⌿0=⍵:-⌿⍺ ⋄ x←2-⍨⌿⍵ ⋄ (⍺,⊃x)∇ x}⍤1⊢h
 }
 
-
-:EndNamespace
+day10_p1←{
+	⍝ '.S|-LJ7F'
+	N←¯1 0 ⋄ S←1 0 ⋄ W←0 ¯1 ⋄ E←0 1
+	s←(⍬ ⍬(N S)(E W)(N E)(W N)(W S)(S E))
+	adj←(⊂¨⍳⍴⍵)+s['.S|-LJ7F'⍳⍺@{'S'=⍵}⍵]
+	start←⍸'S'=⍵
+	0{
+		front prev←⍵
+		front←(⊃⍪⌿adj[front])~prev,next←front
+		≡⌿front:1+⍺
+		(1+⍺)∇ front next
+	}start ⍬
+}
+ 
+day10_p2←{
+	⍝ '.S|-LJ7F'
+	N←¯1 0 ⋄ S←1 0 ⋄ W←0 ¯1 ⋄ E←0 1
+	s←(⍬ ⍬(N S)(E W)(N E)(W N)(W S)(S E))
+	adj←(⊂¨⍳⍴⍵)+s['.S|-LJ7F'⍳tm←⍺@{'S'=⍵}⍵]
+	loop←{⍵∪⊃⍪/adj[⍵]}⍣≡⍸'S'=⍵
+	tm←(1 0⍴⍨2×≢⍉tm)\(1 0⍴⍨2×≢tm)⍀'.'@((,⍳⍴tm)~loop)⊢tm
+	exp←{nw n ne w c e sw s se←,⍵
+		c≠' ':c
+		(n∊'F7|')∨s∊'|LJ':'|' ⋄ (w∊'FL-')∨e∊'7J-':'-'
+		c
+	}
+	map←(⊢+2×~)' .'∊⍨tm←exp⌺3 3⊢tm
+	+⌿,(tm='.')∧{⍵×(⍵=1)⍲∨/∨/0={⍵}⌺3 3⊢⍵}⍣≡⊢map
+}
+ 
+ :EndNamespace

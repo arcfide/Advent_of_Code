@@ -196,4 +196,35 @@ day11_p2←{
 	+⌿+/|-/[1]p
 }
  
+day12_p1←{
+	a b←↓⍉' '(≠⊆⊢)⍤1⊢⍵
+	a←¯1+'?.#'∘⍳¨a
+	b←⍎¨b
+	+⌿a{+⌿⍵{⍺≡≢¨⊆⍨⍵}⍤1⊢⍉(0⌈⍺)+[0]m⍀(x⍴2)⊤⍳2*x←+⌿m←¯1=⍺}¨b
+}
+
+day12_p2←{
+	xa←{⊃{⍺,'?',⍵}⌿⍺⍴⊂⍵} ⋄ xb←{∊⍺⍴⊂⍵}
+	a b←↓⍉' '(≠⊆⊢)⍤1⊢⍵ ⋄ b←⍎¨b
+	mem←⍬ ⋄ res←⍬ ⋄ save←{res,←⍵ ⋄ mem,←⊂⍺ ⋄ ⍵}
+	cnt←{
+		(≢mem)>i←mem⍳⊂id←⍺ ⍵:i⊃res ⋄ map siz←⍵ ⋄ c←⊃map
+		0=≢map                        :id save ((⍺=0)∧(0=≢siz))∨(⍺=⊃siz)∧1=≢siz
+		(⍺=0)∧(≢map)<(+⌿siz)+(≢siz)-1 :id save 0
+		(0=≢siz)∧'#'∊map              :id save 0
+		(0=≢siz)                      :id save 1
+		(c='.')∧⍺=0                   :id save 0 ∇ (map↓⍨0⍳⍨'.'=map)siz
+		(c='.')∧⍺=n←⊃siz              :id save 0 ∇ (map↓⍨0⍳⍨'.'=map)(1↓siz)
+		(c='.')                       :id save 0
+		(c='#')∧(0=≢siz)              :id save 0
+		(c='#')∧(⍺≠0)                 :id save 0
+		(c='#')∧n>m←0⍳⍨map∊'?#'       :id save 0
+		(c='#')                       :id save n ∇(n↓map)siz
+		(⍺=n)                         :id save 0 ∇(1↓map)(1↓siz)
+		('#'∊m↑map)∧n>m               :id save 0
+		n>m                           :id save 0 ∇(m↓map)siz
+		1                             :id save (0 ∇(1↓map)siz)+n∇(n↓map)siz
+	}
+	+⌿(5 xa¨ a){(⍳≢⍺){0 cnt ⍵⊣mem⊢←⍬⊣res⊢←⍬}⍤0 1⍉↑⍺ ⍵}5 xb¨ b
+}
 :EndNamespace

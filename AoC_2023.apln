@@ -243,4 +243,18 @@ day13_p2←{
 	+⌿{∨⌿m←2=+⌿∘,¨0=0 rpt ⍵:100×1+1⍳⍨m ⋄ ∨⌿m←2=+⌿∘,¨0=1 rpt ⍵:1+1⍳⍨m}¨in
 }
  
+day14_p1←{
+	+⌿{+⌿∊(≢⍵)-(1+⍸r)+(⍳+⌿)¨'O'=(r←'#'=⍵)⊂⍵}⍤1⊢m←⍉'#'⍪⍵
+}
+
+day14_p2←{
+	m←'#',('#'⍪⍵⍪'#'),'#'
+	tilt←{{∊{⍵[⍋'#O.'⍳⍵]}¨('#'=⍵)⊂⍵}⍤1⊢⍵}
+	cycle←{⊖⌽tilt⍉⊖tilt⍉⊖tilt⍉tilt⍉⍵}
+	load←{+⌿,m×(≢⍵)-1+(⍳≢⍵)×⍤1⊢m←'O'=⍉⍵}
+	n←cycle⍣{(⊂⍺)∊seen:1 ⋄ 0⊣seen,←⊂⍺}⊃seen←,⊂m
+	cnt←1000000000
+	load seen⊃⍨h+cnt-h+loop×⌊(cnt-h)÷loop←(≢seen)-h←seen⍳⊂n
+}
+
 :EndNamespace

@@ -257,4 +257,24 @@ day14_p2←{
 	load seen⊃⍨h+cnt-h+loop×⌊(cnt-h)÷loop←(≢seen)-h←seen⍳⊂n
 }
 
+day15_p1←{
+	hash←{{256|17×⍺+⍵}⌿(⌽⎕UCS ⍵),0}
+	+⌿hash¨','(≠⊆⊢)⍵
+}
+
+day15_p2←{
+	hash←{{256|17×⍺+⍵}⌿(⌽⎕UCS ⍵),0}
+	map←256⍴⊂0⍴⊂'' ''
+	ins←{
+		mp←map⊃⍨bx←hash ⍺
+		(⊂⍺)∊⊃¨mp:(bx⊃map)[(⊃¨mp)⍳⊂⍺]←⊂⍺ ⍵
+		(bx⊃map),←⊂⍺ ⍵
+		0
+	}
+	rem←{(bx⊃map)←(~(⊃¨m)∊⊂⍵)⌿m←map⊃⍨bx←hash ⍵}
+	_←{'-'=⊃⌽⍵:rem ¯1↓⍵ ⋄ ins⌿'='(≠⊆⊢)⍵}¨','(≠⊆⊢)⍵
+	+⌿∊(1+⍳≢map){0=≢⍵:0 ⋄ ⍺×(1+⍳≢⍵)×⍎¨⊃∘⌽¨⍵}¨map
+	+⌿hash¨','(≠⊆⊢)⍵
+}
+ 
 :EndNamespace

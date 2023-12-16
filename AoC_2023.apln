@@ -277,4 +277,41 @@ day15_p2←{
 	+⌿hash¨','(≠⊆⊢)⍵
 }
  
+day16_p1←{
+	R L U D←(0 1)(0 ¯1)(¯1 0)(1 0)
+	mr←∊∘(⍸'/'=⍵) ⋄ ml←∊∘(⍸'\'=⍵) ⋄ sv←∊∘(⍸'|'=⍵) ⋄ sh←∊∘(⍸'-'=⍵)
+	seen←⍬
+	step←{
+		seen,←⊂nrg pos dir←⍵
+		pos←dir+pos ⋄ pos dir⌿⍨←⊂∧⌿¨(pos≥0)∧pos<⊂⍴nrg ⋄ pos dir⌿⍨←⊂≠pos,¨dir
+		nrg[pos]←1
+		dir[i]←U D R L[R L U D⍳dir[i←⍸mr pos]]
+		dir[i]←D U L R[R L U D⍳dir[i←⍸ml pos]]
+		pos dir⌿⍨←⊂1+m←sv pos ⋄ i←⍸(1+m)⌿m ⋄ dir[i]←(≢i)⍴U D
+		pos dir⌿⍨←⊂1+m←sh pos ⋄ i←⍸(1+m)⌿m ⋄ dir[i]←(≢i)⍴L R
+		nrg pos dir
+	}
+	nrg pos dir←step⍣{(⊂⍺)∊seen}((⍴⍵)⍴0)(,⊂0 ¯1)(,⊂R)
+	+⌿,nrg
+}
+
+day16_p2←{
+	R L U D←(0 1)(0 ¯1)(¯1 0)(1 0)
+	mr←∊∘(⍸'/'=⍵) ⋄ ml←∊∘(⍸'\'=⍵) ⋄ sv←∊∘(⍸'|'=⍵) ⋄ sh←∊∘(⍸'-'=⍵) ⋄ shp←⍴⍵
+	step←{
+		pos dir path←⍵ ⋄ pos←dir+pos
+		pos dir⌿⍨←⊂∧⌿¨(pos≥0)∧pos<⊂shp
+		pos dir⌿⍨←⊂~path[i←(R L U D⍳dir),¨pos] ⋄ path[i]←1
+		dir[i]←U D R L[R L U D⍳dir[i←⍸mr pos]]
+		dir[i]←D U L R[R L U D⍳dir[i←⍸ml pos]]
+		pos dir⌿⍨←⊂1+m←sv pos ⋄ i←⍸(1+m)⌿m ⋄ dir[i]←(≢i)⍴U D
+		pos dir⌿⍨←⊂1+m←sh pos ⋄ i←⍸(1+m)⌿m ⋄ dir[i]←(≢i)⍴L R
+		pos dir path
+	}
+	nrg←{pos dir path←step⍣{0=≢⊃⍺}(,⊂⍺)(⊂⍵)(0⍴⍨4,shp) ⋄ +⌿,∨⌿path}
+	h w←shp
+	l←((⍳h),¨¯1)nrg¨⊂R ⋄ r←((⍳h),¨w)nrg¨⊂L ⋄ t←(¯1,¨⍳w)nrg¨⊂D ⋄ b←(h,¨⍳w)nrg¨⊂U
+	⌈⌿l,r,t,b
+}
+
 :EndNamespace

@@ -314,4 +314,43 @@ day16_p2←{
 	⌈⌿l,r,t,b
 }
 
+day17_p1←{
+         N S E W←(¯1 0)(1 0)(0 1)(0 ¯1)
+         unv←(4 4,⍴⍵)⍴1 ⋄ heat←(4 4,⍴⍵)⍴⌊⌿⍬ ⋄ hlm←⍎¨⍵
+         smp←(N E W)(S E W)(E N S)(W N S)
+         dmp←(0 2 3)(1 2 3)(2 0 1)(3 0 1)
+         step←{
+                 dir←⊃¨cur←⍵[⊃⍋heat[⍵]]
+                 nxt←(dir⊃dmp),¨(1+1 0 0×1⊃¨cur),¨(2↓¨cur)+dir⊃smp
+                 nxt⌿⍨←∧⌿¨(nxt≥0)∧(nxt<⊂⍴unv) ⋄ nxt⌿⍨←unv[nxt]
+                 heat[nxt]⌊←heat[cur]+hlm[2↓¨nxt]
+                 unv[cur]←0
+                 (⍵~cur),nxt
+         }
+         heat[;0;0;0]←0
+         _←step⍣{∨⌿~,((⍴hlm)-1)⌷[2 3]unv}⍸0=heat
+         ⌊⌿,((⍴hlm)-1)⌷[2 3]heat
+}
+
+day17_p2←{
+	hlm←,⍎¨⍵ ⋄ h w←⍴⍵ ⋄ N S E W←⍳4 ⋄ off←(-w)w 1 ¯1 ⋄ end←(≢,⍵)-1 ⋄ min←((≢,⍵),4,11)⍴⌊⌿⍬
+	{
+		pos dir len htl←⍵
+		0=≢pos:⌊⌿,min[end;;4+⍳7]
+		nd←↑(N E W)(S E W)(E N S)(W N S)[dir]
+		np←pos+[0]off[nd]
+		nl←((⍪1+len),1),1
+		nh←3/⍪htl
+		m←~(len∘.<0 4 4)∨(nl>10)∨(np<0)∨(np>end)∨((nd=E)∧[0]0=w|pos+1)∨((nd=W)∧[0]0=w|pos)
+		np nd nl nh←(,m)∘⌿∘,¨np nd nl nh
+		nh+←hlm[np]
+		np nd nl nh i⌿⍨←⊂(min[i←np,¨nd,¨nl]>nh)∧∧/nh∘.<⌊⌿min[end;;4+⍳7]
+		np nd nl nh i⌷⍨←⊂⊂⍋nh
+		np nd nl nh i⌿⍨←⊂≠np,nd,⍪nl
+		min[i]←nh
+		∇ np nd nl nh
+	}(0 0)(1 2)(0 0)(0 0)
+}
+
+
 :EndNamespace

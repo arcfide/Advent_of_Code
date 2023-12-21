@@ -352,5 +352,20 @@ day17_p2←{
 	}(0 0)(1 2)(0 0)(0 0)
 }
 
+day18_p1←{
+	h w←⍴⍵ ⋄ dir len color←↓⍉' '(≠⊆⊢)⍤1⊢⍵ ⋄ dir←'UDLR'⍳∊dir ⋄ len←⍎¨len ⋄ color←color
+	off←(¯1 0)(1 0)(0 ¯1)(0 1)
+	e←0≠⍸⍣¯1↓{⍵[⍋⍵;]}(|⌊⌿e)+[1]e←↑⊃{d l←⍺ ⋄ ⍵,(⊢⌿⍵)+off[d]×1+⍳l}⌿(⌽dir,¨len),⊂,⊂(0 0)
+	f←{⍵×~(~e)∧∨/,⍤2⊢0={⍵}⌺3 3⊢⍵}⍣≡e+1
+	+⌿,f≠0
+}
+
+day18_p2←{
+	h w←⍴⍵ ⋄ dir len color←↓⍉' '(≠⊆⊢)⍤1⊢⍵ ⋄ color←⍉2↓¯1↓⍉↑color
+	len dir←(16⊥⍉'0123456789abcdef'⍳⎕C 5↑[1]color)('0123'⍳∊¯1↑[1]color)
+	off←(0 1)(1 0)(0 ¯1)(¯1 0)
+	pts←⊃{⍵,(⊢⌿⍵)+l×off⌷⍨⊃d l←⍺}⌿(⌽dir,¨len),⊂,⊂0 0
+	1+(+⌿len⌿⍨dir≤1)+|+⌿2÷⍨2-.×∘⌽⌿pts
+}
 
 :EndNamespace

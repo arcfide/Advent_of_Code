@@ -368,4 +368,31 @@ day18_p2←{
 	1+(+⌿len⌿⍨dir≤1)+|+⌿2÷⍨2-.×∘⌽⌿pts
 }
 
+day19_p1←{
+	input←' '⍪⍵
+	rules parts←1↓¨input⊂[0]⍨input∧.=' '
+	parts←⎕D(⍎¨∊⍨⊆⊢)⍤1⊢parts
+	rules←'{' '\,' '}'⎕R'←{x m a s←⍵ ⋄ ' '⍵ ⋄ ' '⍵}'⍤1⊢rules
+	A←{1} ⋄ R←{0}
+	eval←⎕NS,¨'A' 'R'
+	_←{_←eval.⍎⍵ ⋄ 0}⍤1⊢rules
+	+⌿,(eval.in⍤1⊢parts)⌿parts
+}
+
+day19_p2←{
+	input←' '⍪⍵
+	rules parts←1↓¨input⊂[0]⍨input∧.=' '
+	rules←'{' '<' '>' ':' '\,' '\}'⎕R'←{(' ' LT ' ' GT ' ' merge ' ')comb(' ')⍵}'⍤1⊢rules
+	ns←⎕NS ⍬
+	ns.(x m a s)←⍳4
+	ns.A←{(×⌿¯1+|-/⍵)⍵}
+	ns.R←{0 ⍵}
+	ns.comb←{c1 r1←⍺⍺ ⍵ ⋄ c2 r2←⍵⍵ r1 ⋄ (c1+c2)r2}
+	ns.merge←{c r←⍵⍵ ⍺⍺ ⍵ ⋄ c(1 ⍺⍺ ⍵)}
+	ns.GT←{⍺←0 ⋄ ⍺:⍺⍺ LT(⍵⍵+1)⊢⍵ ⋄ r←⍵ ⋄ r[⍺⍺;0]⌈←⍵⍵ ⋄ r}
+	ns.LT←{⍺←0 ⋄ ⍺:⍺⍺ GT(⍵⍵-1)⊢⍵ ⋄ r←⍵ ⋄ r[⍺⍺;1]⌊←⍵⍵ ⋄ r}
+	_←{_←ns.⍎⍵ ⋄ 0}⍤1⊢rules
+	⊃ns.in 4 2⍴0 4001
+}
+
 :EndNamespace

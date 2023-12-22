@@ -394,5 +394,123 @@ day19_p2←{
 	_←{_←ns.⍎⍵ ⋄ 0}⍤1⊢rules
 	⊃ns.in 4 2⍴0 4001
 }
+ 
+day20_p1←{
+	type←'b%&'⍳⍵[;0]
+	mod dst←↓⍉{(⊃x)(1↓x)⊣x←(⎕C ⎕A)(∊⍨⊆⊢)⍵}⍤1⊢⍵
+	dst←mod∘⍳¨dst ⋄ inp←{⍸⍵∘∊¨dst}¨⍳≢dst ⋄ b←⊃⍸type=0
+	pc←0 0
+	pulse←{
+		str src tgt←⍵
+		tgt≥≢type:⍺ ⍬
+		typ←type[tgt] ⋄ nt←(tgt⍴⍨≢nt),¨nt←tgt⊃dst
+		(typ=0):⍺(str,¨nt)
+		(typ=1)∧str:⍺ ⍬
+		(typ=1):(1≠@tgt⊢⍺)((1≠⍺[tgt]),¨nt)
+		s←str@(⊂tgt,src⍳⍨tgt⊃inp)⊢⍺
+		s((~∧⌿tgt⊃s),¨nt)
+	}
+	push←{0=≢⍵:⍺ ⋄ pc[⊃⊃⍵]+←1 ⋄ ns np←⍺ pulse⊃⍵ ⋄ ns ∇(1↓⍵),np}
+	ip←,⊂0 ¯1 b
+	is←0@(⍸type≠2)⊢0×inp
+	×⌿⎕←pc⊣ip push⍨⍣1000⊢is
+}
+ 
+day20_p2←{
+	⍝ Manually extracted the following state from analysis of the code.
+	
+	⍝ state←0 1 0 0 0 0 1 1 1 1 1 1 1 1 1 0 1 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 0 1 1 0 0 0 1 1 1 1 0 1 0 1 1 0 1 1 1
+	⍝ 2⊥⍉4 12⍴10↓state
+	⍝ ∧⌿2⊥⍉4 12⍴10↓state
+	
+	⍝ broadcaster -> kg, dz, ff, bq
+	⍝ &gf -> rx
+	⍝ 
+	⍝ &qk -> gf
+	⍝ &zs -> gf
+	⍝ &kr -> gf
+	⍝ &kf -> gf
+	⍝ 
+	⍝ &qr -> dp, bq, nd, rz, mg, qk, mh
+	⍝ &cx -> ff, vx, zs
+	⍝ &bf -> dz, zg, kr, sl, fk, kp, dc
+	⍝ &gm -> kg, kf, fq, nc, lf
+	⍝ 
+	⍝ %sf -> qr
+	⍝ %xk -> qr, sf
+	⍝ %pf -> xk, qr
+	⍝ %zz -> pf, qr
+	⍝ %jx -> qr, zz
+	⍝ %nd -> jx
+	⍝ %tj -> nd, qr
+	⍝ %rz -> tj
+	⍝ %mh -> rz
+	⍝ %dp -> mh
+	⍝ %mg -> dp
+	⍝ %bq -> qr, mg
+	⍝ 
+	⍝ %xt -> cx
+	⍝ %rj -> xt, cx
+	⍝ %sx -> cx, rj
+	⍝ %mf -> cx, sx
+	⍝ %tz -> mf, cx
+	⍝ %hm -> cx, tz
+	⍝ %kt -> hm, cx
+	⍝ %jp -> cx, kt
+	⍝ %cv -> jp, cx
+	⍝ %vx -> cv
+	⍝ %vl -> vx, cx
+	⍝ %ff -> vl, cx
+	⍝ 
+	⍝ %dl -> bf
+	⍝ %hg -> dl, bf
+	⍝ %bb -> hg, bf
+	⍝ %zg -> bb
+	⍝ %pz -> zg, bf
+	⍝ %kp -> pz
+	⍝ %jb -> bf, kp
+	⍝ %rp -> jb, bf
+	⍝ %sl -> rp
+	⍝ %fk -> sl
+	⍝ %dc -> fk
+	⍝ %dz -> bf, dc
+	⍝ 
+	⍝ %vq -> gm
+	⍝ %bh -> vq, gm
+	⍝ %qn -> gm, bh
+	⍝ %fq -> qn
+	⍝ %hr -> fq, gm
+	⍝ %lf -> hr
+	⍝ %ls -> lf, gm
+	⍝ %gb -> ls, gm
+	⍝ %nc -> gb
+	⍝ %vv -> nc, gm
+	⍝ %pt -> gm, vv
+	⍝ %kg -> gm, pt
+	
+	in←⍵⌿⍨~⍵∧.=' '
+	type←'b%&'⍳in[;0]
+	mod dst←↓⍉{(⊃x)(1↓x)⊣x←(⎕C ⎕A)(∊⍨⊆⊢)⍵}⍤1⊢in
+	dst←mod∘⍳¨dst ⋄ inp←{⍸⍵∘∊¨dst}¨⍳≢dst ⋄ b←⊃⍸type=0
+	hlc←0 0 ⋄ hst←(≢dst)⍴0
+	pulse←{
+		str src tgt←⍵
+		hlc[str]+←1
+		⎕←((1+src)⊃(⊂'BT'),mod),'→',('LH'[str]),'→',tgt⊃mod,⊂'rx '
+		tgt≥≢type:⍺ ⍬
+		typ←type[tgt] ⋄ nt←(tgt⍴⍨≢nt),¨nt←tgt⊃dst
+		(typ=0):⍺(str,¨nt)
+		(typ=1)∧str:⍺ ⍬
+		(typ=1):(1≠@tgt⊢⍺)((1≠⍺[tgt]),¨nt)
+		s←(~∧⌿⍺[tgt⊃inp])@tgt⊢⍺
+		s(s[tgt],¨nt)
+	}
+	push←{0=≢⍵:⍺ ⋄ ns np←⍺ pulse⊃⍵ ⋄ hst+←ns≠hst ⋄ ns ∇(1↓⍵),np}
+	ip←,⊂0 ¯1 b
+	is←(≢dst)⍴0
+	⍺←is
+	⎕←st←ip{c s←⍵ ⋄ (1+c)(s push ⍺)}⍣1⊢0 ⍺
+	(×⌿,⊢)hlc
+}
 
-:EndNamespace
+ :EndNamespace

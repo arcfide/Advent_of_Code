@@ -513,4 +513,12 @@ day20_p2←{
 	(×⌿,⊢)hlc
 }
 
- :EndNamespace
+day21_p1←{
+	map←'#.S'⍳⍵
+	step←{(1⌊map)+(⍵≠0)∧∨/(⊂1 3 5 7)⌷[2],⍤2⊢{⍵}⌺3 3⊢2=⍵}
+	+⌿,'S'='#.S'[step⍣64⊢map]
+}
+
+
+
+:EndNamespace

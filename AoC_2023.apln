@@ -546,5 +546,20 @@ day23_p1←{map←⍵
 	}start
 }
 
+day23_p2←{map←⍵
+	open←⍸⍵≠'#'
+	dir←(¯1 0)(1 0)(0 ¯1)(0 1) ⋄ U D L R←⊂¨dir
+	nxt←(⍴⍵)⍴(,⍵≠'#')⍀{⊂⍵⌿⍨⍵∊open}⍤1⊢open∘.+dir
+	start end←(⊣⌿,⊢⌿),open
+	follow←{⍺←1 ⋄ cur←0⌷⍵ ⋄ 2≠≢x←⊃nxt[cur]:(forks⍳cur)⍺ ⋄ (⍺+1)∇(x~⍵),1↑⍵}
+	fkid fkct←↓⍉↑{↓⍉↑follow¨(⊃nxt[⊂⍵]){⍺ ⍵}¨⊂⍵}¨forks←open⌿⍨2≠≢¨nxt[open]
+	start end←forks⍳start end ⋄ max←0
+	{⍺←(≢forks)⍴0
+		⍵≡end:max⌈←{⍵>max:⎕←⍵ ⋄ ⍵}+⌿,⍺
+		0=+⌿x⌿⍨←m←0=⍺[x←⍵⊃fkid]:0
+		v←x{⍵@⍺⊢v}¨m⌿⍵⊃fkct⊣v←⍺
+		⌈⌿v ∇¨x
+	}start
+}
 
 :EndNamespace

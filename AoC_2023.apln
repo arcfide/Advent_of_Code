@@ -519,6 +519,32 @@ day21_p1←{
 	+⌿,'S'='#.S'[step⍣64⊢map]
 }
 
+day22_p1←{
+	brks←⊂[1 2]{⍵[⍒⌊/⍵[;;2];;]}(≢⍵)2 3⍴⍎¨⎕D(∊⍨⊆⊢)⍤1⊢⍵
+	xy←{⍵[;0 1]}¨brks ⋄ z←{⍵[;2]}¨brks
+	ovlp←(∘.≠⍨⍳≢z)∧∘.{∧⌿((0⌷⍺)≤1⌷⍵)∧(1⌷⍺)≥0⌷⍵}⍨xy
+	det←ovlp∧∧⍀∘.≠⍨⍳≢z
+	_←{(⍵⊃z)←(0,|-⌿⍵⊃z)+1+0⌈⌈⌿∊det[⍵;]⌿z}¨⌽⍳≢z
+	hz←⌈⌿¨z ⋄ lz←⌊⌿¨z
+	supp←ovlp∧hz∘.=lz-1
+	eqlv←(∘.≠⍨⍳≢z)∧∘.=⍨hz
+	+⌿eqlv{⍵≡⍵∧∨⌿⍺⌿supp}⍤1⊢supp
+}
+
+day23_p1←{map←⍵
+	open←⍸⍵≠'#'
+	dir←(¯1 0)(1 0)(0 ¯1)(0 1) ⋄ U D L R←⊂¨dir
+	nxt←{⊂⍵⌿⍨⍵∊open}⍤1⊢(⍳⍴⍵)∘.+dir
+	nxt[i]←,∘⊂¨R+i←⍸⍵='>'
+	nxt[i]←,∘⊂¨D+i←⍸⍵='v'
+	start end←⊂¨(⊣⌿,⊢⌿),open
+	{⍺←(⍴map)⍴0
+		⍵≡end:+⌿,⍺
+		v←1@⍵⊢⍺
+		0=+⌿x⌿⍨←~v[x←⊃nxt[⍵]]:0
+		⌈⌿v∘∇∘⊂¨x
+	}start
+}
 
 
 :EndNamespace

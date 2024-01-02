@@ -562,4 +562,21 @@ day23_p2←{map←⍵
 	}start
 }
 
+day24_p1←{
+	low←200000000000000 ⋄ high←400000000000000
+	px py pz vx vy vz←↓⍉↑{('-',⎕D)(⍎¨∊⍨⊆⊢)⍵}⍤1⊢⍵
+	intsct←{⎕FR←1287
+		Ap Av←⍺ ⋄ A0←Ap ⋄ A1←Ap+Av ⋄ A←A0-A1
+		Bp Bv←⍵ ⋄ B0←Bp ⋄ B1←Bp+Bv ⋄ B←B0-B1
+		0=d←A-.×⌽B:0
+		x y←d÷⍨⊃B A-.×(A0-.×⌽A1)(B0-.×⌽B1)
+		∨⌿∊0≥((⊂x y)-Ap Bp)÷Av Bv:0
+		∨⌿(x y<low)∨high<x y:0
+		1
+	}
+	lines←(↓px,⍪py){⍺ ⍵}¨↓vx,⍪vy
+	test←{cur∘←⍺ ⍵ ⋄ (⍺⊃lines)intsct ⍵⊃lines}
+	⊃⊃{((⊃⍵)++⌿⍺ test¨1↓⍵),⍺,1↓⍵}⌿(⍳≢lines),0
+}
+ 
 :EndNamespace

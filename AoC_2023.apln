@@ -579,4 +579,15 @@ day24_p1←{
 	⊃⊃{((⊃⍵)++⌿⍺ test¨1↓⍵),⍺,1↓⍵}⌿(⍳≢lines),0
 }
  
+day25_p1←{
+	dat←⎕A(⊂∊⍨⊆⊢)⍤1⍥⎕C ⍵
+	comps←∪⊃,⌿dat
+	src←⊃¨dat ⋄ tgt←1↓¨dat
+	edges←↑⊃,⌿(⊂¨src){comps⍳⍺ ⍵}¨¨tgt
+	merge←{i e nv←⍵ ⋄ e i⌿⍨←⊂~∨/e∧.=v u,⍪u v←e[?≢e;] ⋄ i(nv@{⍵∊u v}⊢e)(nv+1)}
+	cut←edges⌷⍨⊣⌿{merge⍣(¯2+≢comps)⊢(⍳≢edges)edges(≢comps)}⍣{3=≢⊃⍺}⍬
+	adj←1@(edges~⍥↓cut)⊢(2⍴≢comps)⍴0
+	×⌿+⌿¨∪↓∨.∧⍣≡⍨∨∘⍉⍨adj
+}
+
 :EndNamespace

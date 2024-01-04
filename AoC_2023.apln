@@ -531,6 +531,18 @@ day22_p1←{
 	+⌿eqlv{⍵≡⍵∧∨⌿⍺⌿supp}⍤1⊢supp
 }
 
+day22_p2←{
+	brks←{⍵[⍒⌊/⍵[;;2];;]}(≢⍵)2 3⍴⍎¨⎕D(∊⍨⊆⊢)⍤1⊢⍵
+	xy←brks[;;0 1] ⋄ z←brks[;;2]
+	ovlp←(xy[;0;]∧.≤⍉xy[;1;])∧xy[;1;]∧.≥⍉xy[;0;]
+	_←(ovlp∧∧⍀∘.≠⍨⍳≢z)∘{z[⍵;]←(0,|-⌿z[⍵;])+1+0⌈⌈⌿∊⍺[⍵;]⌿z}¨⌽⍳≢z
+	hz←⌈/z ⋄ lz←⌊/z
+	supp←ovlp∧hz∘.=lz-1
+	pull←{(i⌿⍨0=+⌿s[;i←⍸∨⌿⍵[,⍺;]])(s←0@⍺⊢⍵)}
+	tmbl←{cnt←0 ⋄ _←{f s⊣cnt+←≢⊃f s←⊃pull⌿⍵}⍣{0=≢⊃⍺}⍵ supp ⋄ cnt}
+	+⌿tmbl¨⍳≢brks
+}
+ 
 day23_p1←{map←⍵
 	open←⍸⍵≠'#'
 	dir←(¯1 0)(1 0)(0 ¯1)(0 1) ⋄ U D L R←⊂¨dir

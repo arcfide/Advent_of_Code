@@ -519,6 +519,20 @@ day21_p1←{
 	+⌿,'S'='#.S'[step⍣64⊢map]
 }
 
+day21_p2←{
+	N←(26501365-65)÷131
+	3787+(N×30189)+(+⌿⍳N)×30150
+
+	⍺←64 ⋄ h w←⍴map←⍵ ⋄ dirs←(¯1 0)(0 ¯1)(0 1)(1 0)
+	step←{
+		cur prv c0 c1 sc←⍵
+		new←(∪z⌿⍨'#'≠map[(⊂⍴map)|z←,dirs∘.+cur])~cur,prv
+		new cur(c1+≢new)c0(sc+1)
+	}
+	cur prv c0 c1 sc←step⍣⍺⊢(⍸⍵='S')⍬ 1 0 0
+	⍝ c0
+}
+ 
 day22_p1←{
 	brks←⊂[1 2]{⍵[⍒⌊/⍵[;;2];;]}(≢⍵)2 3⍴⍎¨⎕D(∊⍨⊆⊢)⍤1⊢⍵
 	xy←{⍵[;0 1]}¨brks ⋄ z←{⍵[;2]}¨brks

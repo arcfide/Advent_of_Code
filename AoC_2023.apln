@@ -591,6 +591,29 @@ day24_p1←{
 	⊃⊃{((⊃⍵)++⌿⍺ test¨1↓⍵),⍺,1↓⍵}⌿(⍳≢lines),0
 }
  
+day24_p2←{⎕FR←1287
+	px py pz vx vy vz←↓⍉dat←{('-',⎕D)(⍎¨∊⍨⊆⊢)⍵}⍤1⊢⍵
+	P V←(dat[;⍳3])(dat[;3+⍳3])
+	vsuc←{n d h s←⍵ ⋄ (s=3)∧h=|n:1(h+1)(h+1)0 ⋄ s=3:((|n)+1)((|d)-1)h 0 ⋄ (n d×s⊃(1 ¯1)(¯1 ¯1)(1 ¯1)),h(s+1)}
+	intsct←{(x0 y0 z0)(a0 b0 c0)←⍺ ⋄ (x1 y1 z1)(a1 b1 c1)←⍵
+		0=d←a1 a0-.×b0 b1:0 0 0
+		(∨⌿⊢≠⌊)t1 t0←(1 ¯1 ¯1 1×[1]2 4⍴2⌿b0 a0 b1 a1)+.×x0 x1 y0 y1÷d:0 0 0
+		(⊢≠⌊)c←c0(-c1)1 ¯1+.×t0 t1 z0 z1÷t0-t1:0 0 0
+		(x0+a0×t0)(y0+b0×t0)(z0+t0×c0-c)
+	}
+	{
+		vx vy h s←vsuc ⍵ ⋄ VR←V-[1]vx vy 0
+		x y z←(0⌷P)(0⌷VR)intsct(1⌷P)(1⌷VR)
+		∨⌿0=x y z:∇ vx vy h s
+		∨⌿0=x y z←x y z{a b←⍵
+			(⍵+1)∨.=≢P:⍺
+			⍺≢(a⌷P)(a⌷VR)intsct(b⌷P)(b⌷VR):0 0 0
+			⍺ ∇ ⍵+1
+		}0 1:∇ vx vy h s
+		+⌿x y z
+	}0 0 0 3
+}
+ 
 day25_p1←{
 	dat←⎕A(⊂∊⍨⊆⊢)⍤1⍥⎕C ⍵
 	comps←∪⊃,⌿dat
